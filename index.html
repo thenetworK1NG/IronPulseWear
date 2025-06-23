@@ -11,7 +11,7 @@
 <body>
     <header>
         <nav>
-            <div class="logo">IronPulseWear</div>
+            <div class="logo"><img src="logo.png" alt="IronPulseWear Logo" style="height: 90px; vertical-align: middle;"></div>
             <div class="mobile-nav">
                 <button class="hamburger-menu" aria-label="Menu">
                     <span></span>
@@ -23,7 +23,7 @@
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#products">Products</a></li>
-                <li><a href="#about">About</a></li>
+                <li><a href="https://thenetwork1ng.github.io/IronPulseAbout/" target="_blank" rel="noopener">About</a></li>
                 <li><a href="#contact">Contact</a></li>
                 <li><a href="#cart" class="cart-icon desktop-cart">🛒 <span id="cart-count-desktop">0</span></a></li>
             </ul>
@@ -32,13 +32,22 @@
 
     <main>
         <section id="hero">
+            <div id="hero-bg-animation"></div>
             <div class="hero-content">
                 <h1>ELEVATE YOUR WORKOUT</h1>
                 <p>Premium fitness wear for the dedicated athlete</p>
                 <a href="#products" class="cta-button">Shop Now</a>
             </div>
-            <div class="scroll-indicator">
-                <div class="mouse"></div>
+            <div class="scroll-indicator" id="scroll-indicator">
+                <div class="phone-scroll">
+                  <svg width="36" height="56" viewBox="0 0 36 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="2" y="2" width="32" height="52" rx="8" fill="#fff" fill-opacity="0.13" stroke="#fff" stroke-width="3"/>
+                    <circle cx="18" cy="48" r="2.5" fill="#ff4d4d"/>
+                    <rect x="16" y="10" width="4" height="12" rx="2" fill="#ff4d4d">
+                      <animate attributeName="y" values="10;24;10" dur="1.5s" repeatCount="indefinite"/>
+                    </rect>
+                  </svg>
+                </div>
                 <p>Scroll to explore</p>
             </div>
         </section>
@@ -274,6 +283,20 @@
             <p>&copy; 2024 IronPulseWear. All rights reserved.</p>
         </div>
     </footer>
+
+    <div id="checkout-animation" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(255,255,255,0.95); z-index:2000; align-items:center; justify-content:center;">
+      <div class="checkout-animation-content">
+        <svg class="checkout-animation-svg" width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="60" cy="60" r="54" stroke="#ff4d4d" stroke-width="8" fill="none" stroke-dasharray="339.292" stroke-dashoffset="0">
+            <animate attributeName="stroke-dashoffset" from="339.292" to="0" dur="0.7s" fill="freeze"/>
+          </circle>
+          <polyline points="40,65 55,80 85,50" stroke="#ff4d4d" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <animate attributeName="points" values="40,65 55,80 85,50;40,65 55,80 85,50" keyTimes="0;1" dur="0.7s" fill="freeze"/>
+          </polyline>
+        </svg>
+        <div class="checkout-animation-text">Order Sent!</div>
+      </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

@@ -60,6 +60,9 @@ document.querySelectorAll('.cart-icon').forEach(icon => {
 window.addEventListener('click', function(e) {
     if (e.target === cartModal) {
         cartModal.style.display = 'none';
+        // Restore cart view (with checkout button) next time
+        document.querySelector('.cart-total').style.display = '';
+        updateCart();
     }
 });
 
@@ -176,7 +179,10 @@ function showCheckoutForm() {
             <label>Name*<br><input type="text" name="name" required></label><br>
             <label>Email*<br><input type="email" name="email" required></label><br>
             <label>Phone<br><input type="tel" name="phone"></label><br>
-            <label>Order Details<br><textarea name="orderDetails" rows="4" required>${cart.map(item => `${item.name} (x${item.quantity}) - R${(item.price * item.quantity).toFixed(2)}`).join('\n')}</textarea></label><br>
+            <div class="order-details-area">
+              <label>Order Details</label>
+              <textarea name="orderDetails" rows="4" required>${cart.map(item => `${item.name} (x${item.quantity}) - R${(item.price * item.quantity).toFixed(2)}`).join('\n')}</textarea>
+            </div>
             <button type="submit">Submit Order</button>
         </form>
         <div id="order-success" style="display:none;color:green;margin-top:1rem;">Order sent! Thank you.</div>
@@ -216,6 +222,8 @@ function submitOrder(e) {
     .then(() => {
         // Hide the cart modal
         cartModal.style.display = 'none';
+        // Show checkout animation
+        showCheckoutAnimation();
         // Show success message
         showToast("Thanks for the order request! We'll get back to you in a flash! 🚀");
         // Reset form and cart
@@ -373,4 +381,88 @@ function showNotification(message) {
     setTimeout(() => {
         notification.remove();
     }, 3000);
-} 
+}
+
+// Add this function at the end of the file
+function showCheckoutAnimation() {
+    const anim = document.getElementById('checkout-animation');
+    if (!anim) return;
+    anim.classList.add('active');
+    anim.style.display = 'flex';
+    setTimeout(() => {
+        anim.classList.remove('active');
+        anim.style.display = 'none';
+    }, 1500);
+}
+
+// Add this at the end of the file
+(function gymHeroWaveAnimation() {
+    const container = document.getElementById('hero-bg-animation');
+    if (!container) return;
+    container.innerHTML = `
+      <svg id="gym-waves" width="100%" height="100%" viewBox="0 0 1440 400" preserveAspectRatio="none" style="position:absolute;top:0;left:0;z-index:0;">
+        <defs>
+          <linearGradient id="waveGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#232526"/>
+            <stop offset="100%" stop-color="#414345"/>
+          </linearGradient>
+        </defs>
+        <path id="wave1" fill="url(#waveGradient)" fill-opacity="0.7" d="M0,320 C360,400 1080,200 1440,320 L1440,400 L0,400 Z"></path>
+        <path id="wave2" fill="#ff4d4d" fill-opacity="0.15" d="M0,340 C400,300 1040,420 1440,340 L1440,400 L0,400 Z"></path>
+      </svg>
+    `;
+    // Animate the waves
+    let t = 0;
+    function animate() {
+      t += 0.016;
+      // Animate wave1
+      const wave1 = document.getElementById('wave1');
+      const wave2 = document.getElementById('wave2');
+      if (wave1 && wave2) {
+        const wave1Y = 320 + Math.sin(t) * 10;
+        const wave2Y = 340 + Math.cos(t/1.5) * 12;
+        wave1.setAttribute('d', `M0,${wave1Y} C360,${400+Math.sin(t)*10} 1080,${200+Math.cos(t/2)*20} 1440,${wave1Y} L1440,400 L0,400 Z`);
+        wave2.setAttribute('d', `M0,${wave2Y} C400,${300+Math.cos(t/2)*18} 1040,${420+Math.sin(t/1.2)*15} 1440,${wave2Y} L1440,400 L0,400 Z`);
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
+})();
+
+// Hide scroll-indicator after 5 seconds
+window.addEventListener('DOMContentLoaded', function() {
+  var scrollInd = document.getElementById('scroll-indicator');
+  if (scrollInd) {
+    setTimeout(function() {
+      scrollInd.style.transition = 'opacity 0.6s';
+      scrollInd.style.opacity = '0';
+      setTimeout(function() { scrollInd.style.display = 'none'; }, 700);
+    }, 5000);
+  }
+});
+
+// Fade-in animation for product cards on scroll
+(function fadeInProductCardsOnScroll() {
+  const cards = document.querySelectorAll('.product-card');
+  if (!('IntersectionObserver' in window)) {
+    // Fallback: show all
+    cards.forEach(card => card.classList.add('fade-in'));
+    return;
+  }
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('fade-in');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.18 });
+  cards.forEach(card => observer.observe(card));
+})();
+
+// Add .touch-device class to body if on a touch device
+(function detectTouchDevice() {
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+    document.body.classList.add('touch-device');
+  }
+})(); 
